@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class App {
     public static void main(String[] args) {
+        // mudar isso aqui
         Jogo jogo = new Jogo();
 
         JFrame pagina = new JFrame("Pacman");

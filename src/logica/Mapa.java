@@ -60,19 +60,19 @@ public class Mapa {
                 int y = linha * pixelsPorElemento;
 
                 if(tileMap[linha].charAt(coluna) == 'P'){
-                    pacman = new PacMan(x, y, pixelsPorElemento, pixelsPorElemento, imagem.pacmanRight);
+                    pacman = new PacMan(x, y, pixelsPorElemento, pixelsPorElemento, imagem.pacmanRight, pixelsPorElemento/4);
                 } else if (tileMap[linha].charAt(coluna) == 'X') {
                     blocos.add(new Bloco(x,y,pixelsPorElemento,pixelsPorElemento,imagem.bloco));
                 } else if (tileMap[linha].charAt(coluna) == ' ') {
                     comidas.add(new Comida(x+14,y+14,4,4,imagem.comida));
                 } else if (tileMap[linha].charAt(coluna) == 'b') {
-                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmaazul));
+                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmaazul, pixelsPorElemento/4));
                 }else if (tileMap[linha].charAt(coluna) == 'o') {
-                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmalaranja));
+                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmalaranja, pixelsPorElemento/4));
                 }else if (tileMap[linha].charAt(coluna) == 'p') {
-                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmarosa));
+                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmarosa, pixelsPorElemento/4));
                 }else if (tileMap[linha].charAt(coluna) == 'r') {
-                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmavermelho));
+                    fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmavermelho, pixelsPorElemento/4));
                 }
             }
         }
