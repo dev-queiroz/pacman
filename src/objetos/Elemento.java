@@ -18,9 +18,11 @@ public class Elemento {
         this.imagem = imagem;
     }
 
-    public  boolean colisao(HashSet <Elemento> elemento){
-        // fazer logica de colisão
-        return true; //retorno pra teste, tirar depois
+    public  boolean colisao(Elemento elemento){
+        return this.x < elemento.getX() + elemento.getAltura() &&  //testa se toca na direita
+                this.x + this.largura > elemento.getX() &&  //testa se toca na esquerda
+                this.y < elemento.getY() + elemento.getAltura() &&  //testa se toca em cima
+                this.y + this.getAltura() > elemento.getY(); //testa se toca embaixo
     }
 
     public int getY() {
