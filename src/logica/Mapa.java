@@ -10,6 +10,8 @@ import java.util.HashSet;
 
 
 public class Mapa {
+    private static final int TAMANHO_COMIDA = 4;
+    private static final int TAMANHO_COMIDA_PODER = 16;
     // mapa
     int colunas = 19;
     int linhas = 21;
@@ -27,13 +29,13 @@ public class Mapa {
     Imagens imagem = new Imagens();
 
 
-    //X = PAREDE, O = NADA, P = Pacman, ' ' = comida
+    // X = parede, O = nada, P = Pacman, espaço = comida, C = comida normal maior
     //Fantasmas: b = blue, o = orange, p = pink, r = red
     private String[] tileMap = {
             "XXXXXXXXXXXXXXXXXXX",
-            "X        X        X",
+            "XC       X       CX",
             "X XX XXX X XXX XX X",
-            "X                 X",
+            "X C             C X",
             "X XX X XXXXX X XX X",
             "X    X       X    X",
             "XXXX XXXX XXXX XXXX",
@@ -49,7 +51,7 @@ public class Mapa {
             "XX X X XXXXX X X XX",
             "X    X   X   X    X",
             "X XXXXXX X XXXXXX X",
-            "X                 X",
+            "XC               CX",
             "XXXXXXXXXXXXXXXXXXX"
     };
 
@@ -64,7 +66,10 @@ public class Mapa {
                 } else if (tileMap[linha].charAt(coluna) == 'X') {
                     blocos.add(new Bloco(x,y,pixelsPorElemento,pixelsPorElemento,imagem.bloco));
                 } else if (tileMap[linha].charAt(coluna) == ' ') {
-                    comidas.add(new Comida(x+14,y+14,4,4,imagem.comida));
+                    comidas.add(new Comida(x+14, y+14, TAMANHO_COMIDA, TAMANHO_COMIDA, imagem.comida));
+                } else if (tileMap[linha].charAt(coluna) == 'C') {
+                    // Usa a mesma imagem da comida comum; muda apenas o tamanho.
+                    comidas.add(new Comida(x+8, y+8, TAMANHO_COMIDA_PODER, TAMANHO_COMIDA_PODER, imagem.comida, true));
                 } else if (tileMap[linha].charAt(coluna) == 'b') {
                     fantasmas.add(new Fantasma(x,y,pixelsPorElemento,pixelsPorElemento,imagem.fantasmaazul, pixelsPorElemento/4));
                 }else if (tileMap[linha].charAt(coluna) == 'o') {

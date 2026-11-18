@@ -1,6 +1,5 @@
 package logica;
 
-import graficos.Imagens;
 import objetos.Bloco;
 import objetos.Comida;
 import objetos.Fantasma;
@@ -13,21 +12,27 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Jogo extends JPanel implements ActionListener, KeyListener {
-    // o que tá em haset é o que pode ir sendo acessado ou removido caso necessário
-    Mapa mapa;
-    HashSet<Bloco> blocos;
-    HashSet<Comida> comidas;
-    HashSet<Fantasma> fantasmas;
-    PacMan pacman;
-    Imagens imagens = new Imagens();
+    private static final int DURACAO_PODER = 160; // 8 segundos a 20 quadros por segundo
+    private static final int PONTOS_PODER = 50;
+    private static final int PONTOS_FANTASMA = 200;
+    private static final int MAX_COMBO_FANTASMAS = 3;
 
-    boolean fimDeJogo;
-    Timer gameLoop;
+    private Mapa mapa;
+    private HashSet<Bloco> blocos;
+    private HashSet<Comida> comidas;
+    private HashSet<Fantasma> fantasmas;
+    private PacMan pacman;
 
-    int vidas;
-    int score = 0;
+    private boolean fimDeJogo;
+    private Timer gameLoop;
+
+    private int vidas;
+    private int score = 0;
+    private int tempoPoder;
+    private int fantasmasComidosNaSequencia;
 
 
     public Jogo() {
@@ -53,13 +58,58 @@ public class Jogo extends JPanel implements ActionListener, KeyListener {
     }
 
     public void mover(){ // função que vai cuidar de cada frame do jogo(considerar colisão, se comeu a comida etc etc)
-        //fazer logica de movimento usando colisão;
-        // implementar o teleporte de um lado pro outro
-        //se vcs quiserem fazer aquelas frutas diferentes ou poderzinhos add tbm
+        coletarPoderes();
+        atualizarPoder();
+        comerFantasmasAssustados();
+    }
+
+    /** Ativa a comida normal ampliada e deixa os fantasmas vulneráveis. */
+    private void ativarPoder() {
+        tempoPoder = DURACAO_PODER;
+        fantasmasComidosNaSequencia = 0;
+        definirFantasmasAssustados(true);
+    }
+
+    private void coletarPoderes() {
+        Iterator<Comida> iterator = comidas.iterator();
+        while (iterator.hasNext()) {
+            Comida comida = iterator.next();
+            if (!comida.isPoder() || !pacman.colisao(comida)) continue;
+            iterator.remove();
+            score += PONTOS_PODER;
+            ativarPoder();
+        }
+    }
+
+    private void atualizarPoder() {
+        if (tempoPoder <= 0) return;
+        tempoPoder--;
+        if (tempoPoder != 0) return;
+
+        definirFantasmasAssustados(false);
+        fantasmasComidosNaSequencia = 0;
+    }
+
+    private void comerFantasmasAssustados() {
+        for (Fantasma fantasma : fantasmas) {
+            if (!fantasma.isAssustado() || !pacman.colisao(fantasma)) continue;
+            score += PONTOS_FANTASMA << Math.min(fantasmasComidosNaSequencia, MAX_COMBO_FANTASMAS);
+            fantasmasComidosNaSequencia++;
+            fantasma.setAssustado(false);
+            fantasma.resetarPosicao();
+        }
+    }
+
+    private void definirFantasmasAssustados(boolean assustados) {
+        for (Fantasma fantasma : fantasmas) {
+            fantasma.setAssustado(assustados);
+        }
     }
 
     public void resetar(){
-        //chama a resetar das classes moveis
+        tempoPoder = 0;
+        fantasmasComidosNaSequencia = 0;
+        definirFantasmasAssustados(false);
     }
 
     public void resetarTotal(){ // reinicia tudo
