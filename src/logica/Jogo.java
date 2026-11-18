@@ -1,5 +1,6 @@
 package logica;
 
+import graficos.Imagens;
 import objetos.Bloco;
 import objetos.Comida;
 import objetos.Fantasma;
@@ -199,13 +200,17 @@ public class Jogo extends JPanel implements ActionListener, KeyListener {
         int codigo = e.getKeyCode();
 
         if(codigo == KeyEvent.VK_UP){
-            // fazeer logica de alterar direção
+            pacman.atualizarDirecao('U', blocos);
+            pacman.atualizarImagem(pacman.getDirecao(), new Imagens());
         } else if (codigo == KeyEvent.VK_DOWN) {
-
+            pacman.atualizarDirecao('D', blocos);
+            pacman.atualizarImagem(pacman.getDirecao(), new Imagens());
         }else if (codigo == KeyEvent.VK_LEFT) {
-
+            pacman.atualizarDirecao('L', blocos);
+            pacman.atualizarImagem(pacman.getDirecao(), new Imagens());
         }else if (codigo == KeyEvent.VK_RIGHT) {
-
+            pacman.atualizarDirecao('R', blocos);
+            pacman.atualizarImagem(pacman.getDirecao(), new Imagens());
         }
     }
 

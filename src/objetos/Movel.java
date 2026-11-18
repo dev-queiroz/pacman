@@ -19,7 +19,20 @@ public class Movel extends Elemento {
     }
 
     //Função de atualizar direção, chama mover e atualzar direcao ,caso tenha uma colisão naquela direção volta pra que tava antes e atualiza a velocidade;
-    public void atualizarDirecao(char c, HashSet<Bloco> blocos){}
+    public void atualizarDirecao(char c, HashSet<Bloco> blocos){
+        char direcaoAnterior = this.direcao;
+        this.direcao = c;
+
+        atualizarVelocidade();
+        mover();
+        for(Bloco bloco : blocos){
+            if(colisao(bloco)){
+                moverParaTras();
+                this.direcao = direcaoAnterior;
+                atualizarVelocidade();
+            }
+        }
+    }
 
     //autoexplicativo né
     public void mover(){
@@ -30,7 +43,7 @@ public class Movel extends Elemento {
     // usa quando colidir com uma parede pra diminuir o x e o y
     public void moverParaTras(){
         x -= velocidadeX;
-        y-= velocidadeY;
+        y -= velocidadeY;
     }
 
     // atualiz a velocidade de acordo com a direção
@@ -46,11 +59,11 @@ public class Movel extends Elemento {
                 break;
             case 'U':
                 velocidadeX = 0;
-                velocidadeY = tamanhoDeslocamento;
+                velocidadeY = -tamanhoDeslocamento;
                 break;
             case 'D':
                 velocidadeX = 0;
-                velocidadeY = -tamanhoDeslocamento;
+                velocidadeY = tamanhoDeslocamento;
                 break;
         }
     }
