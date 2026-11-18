@@ -57,10 +57,62 @@ public class Jogo extends JPanel implements ActionListener, KeyListener {
         setFocusable(true); // deixa como foco
     }
 
-    public void mover(){ // função que vai cuidar de cada frame do jogo(considerar colisão, se comeu a comida etc etc)
+    private void mover() {// função que vai cuidar de cada frame do jogo(considerar colisão, se comeu a comida etc etc)
+        moverPacman();
+        moverFantasmas();
+        coletarComida();
         coletarPoderes();
         atualizarPoder();
         comerFantasmasAssustados();
+    }
+
+    private void moverPacman(){
+        pacman.mover();
+
+        for(Bloco bloco : blocos){
+            if(pacman.colisao(bloco)) {
+                pacman.moverParaTras();
+            }
+        }
+    }
+
+    private void moverFantasmas(){
+        for(Fantasma fantasma : fantasmas){
+            fantasma.mover();
+
+            if(fantasma.colisao(pacman)){
+                vidas--;
+                if(vidas == 0){
+                    fimDeJogo = true;
+                    return;
+                }
+                resetarPosicao();
+            }
+
+            for(Bloco bloco : blocos){
+                if(fantasma.colisao(bloco)){
+                    fantasma.moverParaTras();
+                    //fantasma.atualizarDirecao();
+                }
+            }
+        }
+    }
+
+    private void coletarComida(){
+        comidas.removeIf(comida -> {
+            if(pacman.colisao(comida)){
+                score += 10;
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void resetarPosicao(){
+        for(Fantasma fantasma : fantasmas){
+            fantasma.resetarPosicao();
+        }
+        pacman.resetarPosicao();
     }
 
     /** Ativa a comida normal ampliada e deixa os fantasmas vulneráveis. */
@@ -106,13 +158,13 @@ public class Jogo extends JPanel implements ActionListener, KeyListener {
         }
     }
 
-    public void resetar(){
+    private void resetar(){
         tempoPoder = 0;
         fantasmasComidosNaSequencia = 0;
         definirFantasmasAssustados(false);
     }
 
-    public void resetarTotal(){ // reinicia tudo
+    private void resetarTotal(){ // reinicia tudo
 
     }
 
